@@ -23,5 +23,8 @@
  */
 package lk.ijse.dep.dal;
 
+import java.sql.Connection;
+
 public interface SuperDAO {
+    public abstract void setConnection(Connection connection);
 }
