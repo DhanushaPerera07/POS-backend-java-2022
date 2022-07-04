@@ -93,7 +93,6 @@ public class CustomerDAOImpl implements CustomerDAO {
                     rst.getString("name"),
                     rst.getString("contact_no"));
             customerArrayList.add(customer);
-            return customerArrayList;
         }
 
         return customerArrayList;
