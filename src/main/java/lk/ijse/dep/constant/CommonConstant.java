@@ -24,5 +24,6 @@
 package lk.ijse.dep.constant;
 
 public class CommonConstant {
-    public static final String CONNECTION_POOL_NAME = "cp";
+    public static final String ENTITY_MANAGER_FACTORY_NAME = "emf";
+    public static final String PERSISTENCE_UNIT_NAME = "MyApp";
 }
