@@ -27,20 +27,16 @@ import lk.ijse.dep.business.BOFactory;
 import lk.ijse.dep.business.BOTypes;
 import lk.ijse.dep.business.custom.CustomerBO;
 import lk.ijse.dep.constant.CommonConstant;
-import lk.ijse.dep.constant.MimeTypes;
-import org.apache.commons.dbcp2.BasicDataSource;
 
 import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
-import javax.json.bind.JsonbException;
+import javax.persistence.EntityManagerFactory;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.sql.SQLException;
 
 @WebServlet(urlPatterns = "/api/v1/customers")
 public class CustomerServlet extends HttpServlet {
@@ -51,32 +47,38 @@ public class CustomerServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        /* get the print-writer. */
-        PrintWriter out = resp.getWriter();
+        System.out.println("*************** doGet works! ****************");
 
-        /* set respond type. */
-        resp.setContentType(MimeTypes.Application.JSON);
+        EntityManagerFactory emf = (EntityManagerFactory) getServletContext()
+                .getAttribute(CommonConstant.ENTITY_MANAGER_FACTORY_NAME);
+        System.out.println(emf);
 
-        /* get reference of the basic datasource from the servlet context. */
-        BasicDataSource basicDataSource = (BasicDataSource) getServletContext()
-                .getAttribute(CommonConstant.CONNECTION_POOL_NAME);
-
-        try {
-            customerBO.setConnection(basicDataSource.getConnection());
-        } catch (SQLException e) {
-            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            e.printStackTrace();
-        }
-
-        try {
-            out.println(jsonb.toJson(customerBO.findAllCustomers()));
-        } catch (JsonbException e) {
-            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            e.printStackTrace();
-        } catch (SQLException e) {
-            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            e.printStackTrace();
-        }
+//        /* get the print-writer. */
+//        PrintWriter out = resp.getWriter();
+//
+//        /* set respond type. */
+//        resp.setContentType(MimeTypes.Application.JSON);
+//
+//        /* get reference of the basic datasource from the servlet context. */
+//        BasicDataSource basicDataSource = (BasicDataSource) getServletContext()
+//                .getAttribute(CommonConstant.CONNECTION_POOL_NAME);
+//
+//        try {
+//            customerBO.setConnection(basicDataSource.getConnection());
+//        } catch (SQLException e) {
+//            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+//            e.printStackTrace();
+//        }
+//
+//        try {
+//            out.println(jsonb.toJson(customerBO.findAllCustomers()));
+//        } catch (JsonbException e) {
+//            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+//            e.printStackTrace();
+//        } catch (SQLException e) {
+//            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+//            e.printStackTrace();
+//        }
 
     }
 }
