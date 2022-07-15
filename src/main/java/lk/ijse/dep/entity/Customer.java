@@ -27,11 +27,17 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.*;
+
+@Table(name = "customer")
+@Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 public class Customer implements SuperEntity {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     private String name;
