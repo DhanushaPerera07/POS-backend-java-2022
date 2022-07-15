@@ -23,13 +23,13 @@ package lk.ijse.dep.listener;/*
  */
 
 import lk.ijse.dep.constant.CommonConstant;
-import lk.ijse.dep.util.DatabaseHelper;
-import org.apache.commons.dbcp2.BasicDataSource;
 
+import javax.persistence.EntityManagerFactory;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
-import java.sql.SQLException;
+
+import static lk.ijse.dep.util.HibernateUtil.getEntityManagerFactory;
 
 @WebListener
 public class MyContextListener implements ServletContextListener {
@@ -37,19 +37,22 @@ public class MyContextListener implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         /* This method is called when the servlet context is initialized(when the Web application is deployed). */
-        BasicDataSource bds = DatabaseHelper.getDataSource();
-        sce.getServletContext().setAttribute(CommonConstant.CONNECTION_POOL_NAME, bds);
+//        BasicDataSource bds = DatabaseHelper.getDataSource();
+//        sce.getServletContext().setAttribute(CommonConstant.CONNECTION_POOL_NAME, bds);
+
+        EntityManagerFactory emf = getEntityManagerFactory();
+
+        sce.getServletContext().setAttribute(CommonConstant.ENTITY_MANAGER_FACTORY_NAME, emf);
+
+//        getEntityManagerFactory();
 
     }
 
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
         /* This method is called when the servlet Context is undeployed or Application Server shuts down. */
-        BasicDataSource cp = (BasicDataSource) sce.getServletContext().getAttribute(CommonConstant.CONNECTION_POOL_NAME);
-        try {
-            cp.close();
-        } catch (SQLException e) {
-            throw new RuntimeException("Failed to close Connection Pool." + e);
-        }
+        EntityManagerFactory emf = (EntityManagerFactory) sce.getServletContext()
+                .getAttribute(CommonConstant.ENTITY_MANAGER_FACTORY_NAME);
+        emf.close();
     }
 }
