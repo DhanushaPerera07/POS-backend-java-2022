@@ -35,12 +35,18 @@ public class DatabaseHelper {
 
     private static DatabaseHelper databaseHelper = null;
 
+    private static Properties properties = null;
+
     private static BasicDataSource dataSource = null;
 
-    private static final String DB_DRIVER_CLASS = "driver.class.name";
-    private static final String DB_URL = "db.url";
-    private static final String DB_USERNAME = "db.username";
-    private static final String DB_PASSWORD = "db.password";
+    private static final String DB_DRIVER_CLASS = "javax.persistence.jdbc.driver";
+    //    private static final String DB_DRIVER_CLASS = "driver.class.name";
+    private static final String DB_URL = "javax.persistence.jdbc.url";
+    //    private static final String DB_URL = "db.url";
+    private static final String DB_USERNAME = "javax.persistence.jdbc.user";
+    //    private static final String DB_USERNAME = "db.username";
+    private static final String DB_PASSWORD = "javax.persistence.jdbc.password";
+//    private static final String DB_PASSWORD = "db.password";
 
     private static final Integer INITIAL_NO_CONNECTIONS = 5;
     private static final Integer MAX_NO_CONNECTIONS = 10;
@@ -51,12 +57,7 @@ public class DatabaseHelper {
     private static String password;
 
     static {
-        Properties properties = new Properties();
-        try {
-            properties.load(DatabaseHelper.class.getResourceAsStream("/application.properties"));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        getMyProperties();
 
         driverClassName = properties.getProperty(DB_DRIVER_CLASS);
         url = properties.getProperty(DB_URL);
@@ -78,6 +79,19 @@ public class DatabaseHelper {
 //    public static DatabaseHelper getInstance() {
 //        return (databaseHelper == null) ? databaseHelper = new DatabaseHelper() : databaseHelper;
 //    }
+
+    public static Properties getMyProperties() {
+        if (properties == null) {
+            properties = new Properties();
+            try {
+                properties.load(DatabaseHelper.class.getResourceAsStream("/application.properties"));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        return properties;
+    }
 
     public static BasicDataSource getDataSource() {
         return dataSource;
